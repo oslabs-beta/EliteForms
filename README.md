@@ -196,12 +196,11 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 Ammar Doo - 
 
-Esther Cho - https://www.linkedin.com/in/esther-cho/
+[Esther Cho](https://www.linkedin.com/in/esther-cho/)
 
-Patrick Mojica - https://www.linkedin.com/in/patrick-mojica-1298b968/
+[Patrick Mojica](https://www.linkedin.com/in/patrick-mojica-1298b968/)
 
-Shinhae Na - https://www.linkedin.com/in/shinhaena-stella/
-
+[Shinhae Na](https://www.linkedin.com/in/shinhaena-stella/)
 
 <!-- Project Link: [https://github.com/oslabs-beta/LitForms](https://github.com/oslabs-beta/LitForms)
  -->
