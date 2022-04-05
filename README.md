@@ -195,13 +195,16 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 ## Contact
 
 Ammar Doo - 
+
 Esther Cho - https://www.linkedin.com/in/esther-cho/
+
 Patrick Mojica - https://www.linkedin.com/in/patrick-mojica-1298b968/
+
 Shinhae Na - https://www.linkedin.com/in/shinhaena-stella/
 
 
-Project Link: [https://github.com/oslabs-beta/LitForms](https://github.com/oslabs-beta/LitForms)
-
+<!-- Project Link: [https://github.com/oslabs-beta/LitForms](https://github.com/oslabs-beta/LitForms)
+ -->
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
