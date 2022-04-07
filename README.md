@@ -29,23 +29,23 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/oslabs-beta/LitForms">
+  <a href="https://github.com/oslabs-beta/EliteForms">
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a>
 
-<h3 align="center">LitForms</h3>
+<h3 align="center">EliteForms</h3>
 
   <p align="center">
     A simple form library for flexible, performant web forms.
     <br />
-    <a href="https://github.com/oslabs-beta/LitForms"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/oslabs-beta/EliteForms"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/oslabs-beta/LitForms">View Demo</a>
+    <a href="https://github.com/oslabs-beta/EliteForms">View Demo</a>
     ·
-    <a href="https://github.com/oslabs-beta/LitForms/issues">Report Bug</a>
+    <a href="https://github.com/oslabs-beta/EliteForms/issues">Report Bug</a>
     ·
-    <a href="https://github.com/oslabs-beta/LitForms/issues">Request Feature</a>
+    <a href="https://github.com/oslabs-beta/EliteForms/issues">Request Feature</a>
   </p>
 </div>
 
@@ -124,7 +124,7 @@ This is an example of how to list things you need to use the software and how to
 1. Get a free API Key at [https://example.com](https://example.com)
 2. Clone the repo
    ```sh
-   git clone https://github.com/oslabs-beta/LitForms.git
+   git clone https://github.com/oslabs-beta/EliteForms.git
    ```
 3. Install NPM packages
    ```sh
@@ -158,7 +158,7 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 - [ ] Feature 3
     - [ ] Nested Feature
 
-See the [open issues](https://github.com/oslabs-beta/LitForms/issues) for a full list of proposed features (and known issues).
+See the [open issues](https://github.com/oslabs-beta/EliteForms/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -202,7 +202,7 @@ Ammar Doo -
 
 [Shinhae Na](https://www.linkedin.com/in/shinhaena-stella/)
 
-<!-- Project Link: [https://github.com/oslabs-beta/LitForms](https://github.com/oslabs-beta/LitForms)
+<!-- Project Link: [https://github.com/oslabs-beta/EliteForms](https://github.com/oslabs-beta/EliteForms)
  -->
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -221,16 +221,16 @@ Ammar Doo -
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/oslabs-beta/LitForms.svg?style=for-the-badge
-[contributors-url]: https://github.com/oslabs-beta/LitForms/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/oslabs-beta/LitForms.svg?style=for-the-badge
-[forks-url]: https://github.com/oslabs-beta/LitForms/network/members
-[stars-shield]: https://img.shields.io/github/stars/oslabs-beta/LitForms.svg?style=for-the-badge
-[stars-url]: https://github.com/oslabs-beta/LitForms/stargazers
-[issues-shield]: https://img.shields.io/github/issues/oslabs-beta/LitForms.svg?style=for-the-badge
-[issues-url]: https://github.com/oslabs-beta/LitForms/issues
-[license-shield]: https://img.shields.io/github/license/oslabs-beta/LitForms.svg?style=for-the-badge
-[license-url]: https://github.com/oslabs-beta/LitForms/blob/master/LICENSE.txt
+[contributors-shield]: https://img.shields.io/github/contributors/oslabs-beta/EliteForms.svg?style=for-the-badge
+[contributors-url]: https://github.com/oslabs-beta/EliteForms/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/oslabs-beta/EliteForms.svg?style=for-the-badge
+[forks-url]: https://github.com/oslabs-beta/EliteForms/network/members
+[stars-shield]: https://img.shields.io/github/stars/oslabs-beta/EliteForms.svg?style=for-the-badge
+[stars-url]: https://github.com/oslabs-beta/EliteForms/stargazers
+[issues-shield]: https://img.shields.io/github/issues/oslabs-beta/EliteForms.svg?style=for-the-badge
+[issues-url]: https://github.com/oslabs-beta/EliteForms/issues
+[license-shield]: https://img.shields.io/github/license/oslabs-beta/EliteForms.svg?style=for-the-badge
+[license-url]: https://github.com/oslabs-beta/EliteForms/blob/master/LICENSE.txt
 <!-- [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555 -->
 <!-- [linkedin-url]: https://linkedin.com/in/linkedin_username -->
 [product-screenshot]: images/screenshot.png
