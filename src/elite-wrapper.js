@@ -1,4 +1,4 @@
-import {LitElement, html} from 'lit';
+import {LitElement, html, css} from 'lit';
 
 export class EliteWrapper extends LitElement {
   static styles = css`
@@ -123,7 +123,9 @@ export class EliteWrapper extends LitElement {
     return html`
       <div>
         <slot></slot>
-        <button @click=${() => this.validateForm(this.onSubmit, this.arr)}>
+        <button 
+          class='btn block-cube block-cube-hover' 
+          @click=${() => this.validateForm(this.onSubmit, this.arr)}>
         <!-- divs for styling starts -->
           <div class='bg-top'>
             <div class='bg-inner'></div>
