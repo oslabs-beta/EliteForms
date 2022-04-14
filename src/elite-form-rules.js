@@ -199,6 +199,62 @@ const internalValMethods = {
       error: false
     }
   }, 
+
+  reqNumber: function(node) {
+    let error = true
+    const name = node.validationName || node.name || node.type
+    const validEmail = /.*[0-9].*/
+  
+    error = !validEmail.test(node.value)
+  
+    const err = {
+      message: error ? `${name} must contain at least one number` : null,
+      error: error
+    }
+    return err // ***** switched this to return the object in order to collate all the errors
+  },
+
+  reqUpper: function(node) {
+    let error = true
+    const name = node.validationName || node.name || node.type
+    const validEmail = /.*[A-Z].*/
+  
+    error = !validEmail.test(node.value)
+  
+    const err = {
+      message: error ? `${name} must contain at least one uppercase letter` : null,
+      error: error
+    }
+    return err // ***** switched this to return the object in order to collate all the errors
+  },
+
+  reqLower: function(node) {
+    let error = true
+    const name = node.validationName || node.name || node.type
+    const validEmail = /.*[a-z].*/
+  
+    error = !validEmail.test(node.value)
+  
+    const err = {
+      message: error ? `${name} must contain at least one lowercase letter` : null,
+      error: error
+    }
+    return err // ***** switched this to return the object in order to collate all the errors
+  },
+
+  reqSpecialChar: function(node) {
+    let error = true
+    const name = node.validationName || node.name || node.type
+    const validEmail = /.*[!@#$%^&*?].*/
+  
+    error = !validEmail.test(node.value)
+  
+    const err = {
+      message: error ? `${name} must contain at least one special character (! @ # $ % ^ & * ?)` : null,
+      error: error
+    }
+    return err // ***** switched this to return the object in order to collate all the errors
+  }
 }
 
 export default internalValMethods;

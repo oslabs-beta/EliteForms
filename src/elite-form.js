@@ -6,14 +6,29 @@ import debounce from './debounce'
 export class EliteForm extends LitElement {
   static get styles() {
     return css`
-      .elite-form{
+      :host {
+          /* font-family: 'Roboto Slab', serif; */
+          font-family: monospace;
+      }
+      .elite-form {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         padding: 10px;
-        font-family: 'Roboto Slab', serif;
-       }`
-  }
+       }
+      label {
+        font-size: 1.3em;
+        font-weight: bold;
+        letter-spacing: 0.1em;
+      }
+      input {
+        font-family: monospace;
+      }
+      ul {
+        list-style-type: "✕ ";
+      }
+     
+  `}
 
   static properties = {
     eliteForm: {},
@@ -41,21 +56,18 @@ export class EliteForm extends LitElement {
     this.eliteForm = true;
     this.id = '';
     this.class = '';
-    this.type = '';
+    this.type = 'text';
     this.label = '';
     this.placeholder = '';
     this.note = '';
     this.name = '';
     this.errors = '';
-    this.errorBehavior = ''; 
     this.styles = ''; // styles for the most outer div
     this.labelStyles = '';  
     this.inputStyles = ''; 
     this.noteStyles = ''; 
     this.errorStyles = '';
   }
-
-  // style=${styleMap(this.styles)}
 
   render() {
     const error = []
@@ -75,7 +87,7 @@ export class EliteForm extends LitElement {
           id=${this.id} 
           type=${this.type}
           @input=${this.handleInput} 
-          @blur=${this.handleValidation}
+          @blur=${this.handleBlur}
           placeholder=${this.placeholder} 
           style=${styleMap(this.inputStyles)}
         >
@@ -94,8 +106,15 @@ export class EliteForm extends LitElement {
     `;
   }
 
-  withDebounce = debounce(() => this.handleValidation(), 1000)
-  // asyncWithDebounce = debounce(() => this.handdleAsyncValidation(), 1000)
+  withDebounce = debounce(() => this.handleValidation(), 500)
+  
+  handleBlur(event) {
+    if (this.errorBehavior === 'blur') {
+      const { value } = event.target;
+      this.value = value
+      this.handleValidation()
+    }
+  }
 
   handleInput(event) {
     const { value } = event.target;
@@ -103,9 +122,10 @@ export class EliteForm extends LitElement {
     if (this.errorBehavior === 'debounce') {
       this.withDebounce()    
     } else {
-      this.handleValidation()
+      if (this.errorBehavior !== 'blur') {
+        this.handleValidation()
+      }
     }
-    
   }
 
   handleValidation() {
