@@ -1,4 +1,4 @@
-import { EliteForm } from './elite-form.js';
-import { EliteWrapper } from './elite-wrapper.js';
+import { EliteInput } from 'elite-forms/src/elite-input';
+import { EliteForm } from 'elite-forms/src/elite-form';
 
-export { EliteForm, EliteWrapper }
+export { EliteForm, EliteInput }
