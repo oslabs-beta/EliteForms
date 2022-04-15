@@ -7,7 +7,6 @@ export class EliteForm extends LitElement {
   static get styles() {
     return css`
       :host {
-          /* font-family: 'Roboto Slab', serif; */
           font-family: monospace;
       }
       .elite-form {
@@ -74,7 +73,6 @@ export class EliteForm extends LitElement {
     for (let err in this.error) {
       error.push(html`<li>${this.error[err]}</li>`)
     }
-    // console.log('this.error before render', this.error)
 
     return html`
       <div class='elite-form' style=${styleMap(this.styles)}>
@@ -89,8 +87,7 @@ export class EliteForm extends LitElement {
           @input=${this.handleInput} 
           @blur=${this.handleBlur}
           placeholder=${this.placeholder} 
-          style=${styleMap(this.inputStyles)}
-        >
+          style=${styleMap(this.inputStyles)}>
         <div 
           class="note" 
           ?hidden=${!this.note} 
@@ -100,7 +97,7 @@ export class EliteForm extends LitElement {
         <ul 
           class="error" 
           style=${styleMap(this.errorStyles)}>
-          ${error} 
+            ${error} 
         </ul>
       </div>
     `;
