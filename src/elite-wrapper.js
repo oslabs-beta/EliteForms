@@ -1,6 +1,6 @@
 import {LitElement, html, css} from 'lit';
 
-export class EliteWrapper extends LitElement {
+export class EliteForm extends LitElement {
   static styles = css`
     :host {
       font-family: monospace;
@@ -101,6 +101,7 @@ export class EliteWrapper extends LitElement {
     .text:hover {
       color: white;
     }
+
     /* styling for the submit button ends*/
   `;
 
@@ -188,4 +189,4 @@ export class EliteWrapper extends LitElement {
 
 }
 
-window.customElements.define('elite-wrapper', EliteWrapper);
+window.customElements.define('elite-form', EliteForm);

@@ -180,7 +180,7 @@ const internalValMethods = {
     if (node.name === 'username' && result === true) {
       error = true
       const err = {
-        message: error ? `Sorry, ${node.value} is unavailable.` : null,
+        message: error ? `Sorry, '${node.value}' is already taken.` : null,
         error: error
       }
       // console.log(`${node.value} error: `, err)

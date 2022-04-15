@@ -1,156 +1,199 @@
 import {LitElement, html, css} from 'lit';
-import {styleMap} from 'lit/directives/style-map.js';
-import internalValMethods from './elite-form-rules'
-import debounce from './debounce'
 
 export class EliteForm extends LitElement {
-  static get styles() {
-    return css`
-      :host {
-          font-family: monospace;
-      }
-      .elite-form {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        padding: 10px;
-       }
-      label {
-        font-size: 1.3em;
-        font-weight: bold;
-        letter-spacing: 0.1em;
-      }
-      input {
-        font-family: monospace;
-      }
-      ul {
-        list-style-type: "✕ ";
-      }
-     
-  `}
+  static styles = css`
+    :host {
+      font-family: monospace;
+    }
+    /* styling for the submit button starts*/
+    .btn {
+      width: 100%;
+      display: block;
+      margin: 50px 0px;
+      padding: 14px 16px;
+      background: transparent;
+      outline: none;
+      border: 0;
+      color: #000000;
+      letter-spacing: 0.1em;
+      font-weight: bold;
+      font-family: monospace;
+      font-size: 16px;
+    }
+
+    .block-cube {
+      position: relative;
+    }
+    .block-cube .bg-top {
+      position: absolute;
+      height: 10px;
+      background: #ffffff;
+      background: linear-gradient(90deg, #020024 0%, #340979 37%, #00d4ff 94%);
+      bottom: 100%;
+      left: 5px;
+      right: -5px;
+      transform: skew(-45deg, 0);
+      margin: 0;
+    }
+    .block-cube .bg-top .bg-inner {
+      bottom: 0;
+    }
+    .block-cube .bg {
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      background: #ffffff;
+      background: linear-gradient(90deg, #020024 0%, #340979 37%, #00d4ff 94%);
+    }
+    .block-cube .bg-right {
+      position: absolute;
+      background: #ffffff;
+      background: #00d4ff;
+      top: -5px;
+      z-index: 0;
+      bottom: 5px;
+      width: 10px;
+      left: 100%;
+      transform: skew(0, -45deg);
+    }
+    
+    .block-cube .bg-right .bg-inner {
+      left: 0;
+    }
+    .block-cube .bg .bg-inner {
+      transition: all 0.2s ease-in-out;
+    }
+    .block-cube .bg-inner {
+      background: #ffffff;
+      position: absolute;
+      left: 2px;
+      top: 2px;
+      right: 2px;
+      bottom: 2px;
+    }
+    .block-cube .text {
+      position: relative;
+      z-index: 2;
+    }
+    .block-cube.block-input input {
+      position: relative;
+      z-index: 2;
+    }
+  
+    .block-cube.block-input .bg-top,
+    .block-cube.block-input .bg-right,
+    .block-cube.block-input .bg {
+      background: rgba(255, 255, 255, 0.5);
+      transition: background 0.2s ease-in-out;
+    }
+    .block-cube.block-input .bg-right .bg-inner,
+    .block-cube.block-input .bg-top .bg-inner {
+      transition: all 0.2s ease-in-out;
+    }
+  
+    .block-cube.block-cube-hover:focus .bg .bg-inner, 
+    .block-cube.block-cube-hover:hover .bg .bg-inner {
+      top: 100%;
+    }
+
+    .text:hover {
+      color: white;
+    }
+    /* styling for the submit button ends*/
+
+    #sbm-err-msg {
+      color: #C70039;
+      font-weight: bold;
+      font-size: 2em;
+      text-align: center;
+    }
+
+  `;
 
   static properties = {
-    eliteForm: {},
-    id: {},
-    class: {},
-    type: {},
-    label: {},
-    placeholder: {},
-    note: {},
-    name: {},
-    validationRules: {}, // this is the prop that the dev passes in
-    asyncValidationRules: {},
-    errors: {},
-    errorBehavior: {}, 
-    validationName: {},
-  }
-
-  static state = {
-    internalValMethods: internalValMethods, 
-    debounce: debounce
+    onSubmit: {},
+    arr: {},
+    error: {},
+    buttonName: {},
+    badFormMessage: {},
   }
 
   constructor() {
     super();
-    this.eliteForm = true;
-    this.id = '';
-    this.class = '';
-    this.type = 'text';
-    this.label = '';
-    this.placeholder = '';
-    this.note = '';
-    this.name = '';
-    this.errors = '';
-    this.styles = ''; // styles for the most outer div
-    this.labelStyles = '';  
-    this.inputStyles = ''; 
-    this.noteStyles = ''; 
-    this.errorStyles = '';
+    this.error = true
+    this.buttonName = 'Submit'
+    this.badFormMessage = '!! Missing Fields !!'
   }
 
   render() {
-    const error = []
-    for (let err in this.error) {
-      error.push(html`<li>${this.error[err]}</li>`)
-    }
-
     return html`
-      <div class='elite-form' style=${styleMap(this.styles)}>
-        <label 
-          for=${this.id}
-          style=${styleMap(this.labelStyles)}>
-            ${this.label && this.label}
-        </label>
-        <input 
-          id=${this.id} 
-          type=${this.type}
-          @input=${this.handleInput} 
-          @blur=${this.handleBlur}
-          placeholder=${this.placeholder} 
-          style=${styleMap(this.inputStyles)}>
-        <div 
-          class="note" 
-          ?hidden=${!this.note} 
-          style=${styleMap(this.noteStyles)}>
-            ${this.note}
-        </div>
-        <ul 
-          class="error" 
-          style=${styleMap(this.errorStyles)}>
-            ${error} 
-        </ul>
+      <div>
+        <slot></slot>
+        <button 
+          class='btn block-cube block-cube-hover' 
+          @click=${() => this.validateForm(this.onSubmit, this.arr)}>
+        <!-- divs for styling starts -->
+          <div class='bg-top'>
+            <div class='bg-inner'></div>
+          </div>
+          <div class='bg-right'>
+            <div class='bg-inner'></div>
+          </div>
+          <div class='bg'>
+            <div class='bg-inner'></div>
+          </div>
+          <div class='text'>
+            ${this.buttonName}
+          </div>
+        <!-- divs for styling ends -->
+        </button>
+        <div id='sbm-err-msg' ?hidden=${this.error}>${this.badFormMessage}</div>
       </div>
     `;
   }
 
-  withDebounce = debounce(() => this.handleValidation(), 500)
-  
-  handleBlur(event) {
-    if (this.errorBehavior === 'blur') {
-      const { value } = event.target;
-      this.value = value
-      this.handleValidation()
-    }
-  }
+  validateForm(callback, arr) {
+    const fields = this.querySelectorAll('.elite-form')
+    // console.log(fields)
+    let fieldsCheck = true
+    const cache = {}
 
-  handleInput(event) {
-    const { value } = event.target;
-    this.value = value
-    if (this.errorBehavior === 'debounce') {
-      this.withDebounce()    
+    for (let singleElement in fields) {
+      const currentElement = fields[singleElement]
+      if (!isNaN(Number(singleElement))) {
+        if (Array.isArray(arr)) {
+          if (currentElement.eliteForm && arr.includes(currentElement.id)) {
+            if (!currentElement.value) {
+              currentElement.handleValidation()
+            }
+            cache[currentElement.id] = currentElement.value
+            if (Object.keys(currentElement.error).length > 0) fieldsCheck = false
+          }else if (arr.includes(currentElement.id)) {
+            const { id, value } = fields[singleElement]
+            cache[id] = value
+          }
+        } else if (currentElement.eliteForm) {
+          if (!currentElement.value) {
+            currentElement.handleValidation()
+          }
+          cache[currentElement.id] = currentElement.value
+          if (Object.keys(currentElement.error).length > 0) fieldsCheck = false
+        } else {
+          const { id, value } = fields[singleElement]
+          cache[id] = value
+        }
+      }
+    }
+    if (fieldsCheck) {
+      this.error = true
+      callback(cache)
     } else {
-      if (this.errorBehavior !== 'blur') {
-        this.handleValidation()
-      }
+      this.error = false
     }
   }
 
-  handleValidation() {
-    const error = {}
-    for (let rule in this.validationRules) {
-      if (rule === 'checkExisting') {
-        this.handdleAsyncValidation()
-      }
-      const result =  internalValMethods[rule](this, this.validationRules[rule])
-      if (result.error) {
-        error[rule] = result.message
-      }
-    }
-    this.error = error
-    this.requestUpdate()
-  }
-
-  async handdleAsyncValidation() {
-    const error = {}
-    for (let rule in this.validationRules) {
-      const result = await internalValMethods[rule](this, this.validationRules[rule])
-      if (result.error) {
-        error[rule] = result.message
-      }
-    }
-    this.error = error
-    this.requestUpdate()
-  }
 }
 
-window.customElements.define('elite-form', EliteForm)
+window.customElements.define('elite-form', EliteForm);
