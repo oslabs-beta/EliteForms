@@ -81,6 +81,8 @@ export class EliteInput extends LitElement {
     for (let err in this.error) {
       error.push(html`<li>${this.error[err]}</li>`)
     }
+
+    
     if (this.type === 'radio' || this.type === 'checkbox') {
       return html`
         <label>${this.label}</label><br>
