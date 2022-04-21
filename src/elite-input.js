@@ -110,6 +110,11 @@ export class EliteInput extends LitElement {
         html `
          <option value=${option.value}>${option.option}</option>
         `)}
+        <ul 
+          class="error" 
+          style=${styleMap(this.errorStyles)}>
+          ${error} 
+        </ul>
       `
     } else if (this.type === 'multiselect') {
       return html `
@@ -119,6 +124,11 @@ export class EliteInput extends LitElement {
         html `
          <option value=${option.value}>${option.option}</option>
         `)}
+        <ul 
+          class="error" 
+          style=${styleMap(this.errorStyles)}>
+          ${error} 
+        </ul>
       `
     }
     else {
