@@ -102,6 +102,23 @@ export class EliteInput extends LitElement {
         </div>
       `;
     } 
+    else if (this.type === 'select') {
+      return html `
+        <label>${this.label}</label><br>
+        <select id=${this.id} name=${this.name} @change=${this.handleInput}>
+        <option value='none' selected disabled hidden>${this.defaultHidden}</option>
+        ${this.options.map((option) => 
+          html `
+          <option value=${option.value}>${option.option}</option>
+          `)}
+        </select>
+        <ul 
+          class="error" 
+          style=${styleMap(this.errorStyles)}>
+          ${error} 
+        </ul>
+      `
+    } 
     else {
       return html`
       <div class='elite-form' style=${styleMap(this.styles)}>
