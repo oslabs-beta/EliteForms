@@ -75,33 +75,52 @@ export class EliteInput extends LitElement {
       error.push(html`<li>${this.error[err]}</li>`)
     }
 
+    if (this.type === 'radio' || this.type === 'checkbox') {
+      return html `
+      <label>${this.label}</label><br>
+      ${this.options.map((option) => 
+        html `
+          <input 
+            id=${option.optionId}
+            type=${this.type}
+            name=${this.name}
+            value=${option.value}
+            @change=${this.handleInput}
+          />${option.option}<br>
+        `
+      )}
+      `
+    }
+    else {
       return html`
-      <div class='elite-form' style=${styleMap(this.styles)}>
-        <label 
-          for=${this.id}
-          style=${styleMap(this.labelStyles)}>
-            ${this.label && this.label}
-        </label>
-        <input 
-          id=${this.id} 
-          type=${this.type}
-          @input=${this.handleInput} 
-          @blur=${this.handleBlur}
-          placeholder=${this.placeholder} 
-          style=${styleMap(this.inputStyles)}>
-        <div 
-          class="note" 
-          ?hidden=${!this.note} 
-          style=${styleMap(this.noteStyles)}>
-            ${this.note}
-        </div>
-        <ul 
-          class="error" 
-          style=${styleMap(this.errorStyles)}>
+        <div class='elite-form' style=${styleMap(this.styles)}>
+          <label 
+            for=${this.id}
+            style=${styleMap(this.labelStyles)}>
+              ${this.label && this.label}
+          </label>
+          <input 
+            id=${this.id} 
+            type=${this.type}
+            @input=${this.handleInput} 
+            @blur=${this.handleBlur}
+            placeholder=${this.placeholder} 
+            style=${styleMap(this.inputStyles)}
+          >
+          <div
+            class="note" 
+            ?hidden=${!this.note} 
+            style=${styleMap(this.noteStyles)}>
+              ${this.note}
+          </div>
+          <ul 
+            class="error" 
+            style=${styleMap(this.errorStyles)}>
             ${error} 
-        </ul>
-      </div>
-    `;
+          </ul>
+        </div>
+      `;
+    }
   }
 
   withDebounce = debounce(() => this.handleValidation(), 500)
