@@ -43,6 +43,11 @@ export class EliteInput extends LitElement {
     errors: {},
     errorBehavior: {}, 
     validationName: {},
+    options: {},
+    min: {},
+    max: {},
+    showIndex: {},
+    showVal: {},
   }
 
   static state = {
@@ -66,7 +71,9 @@ export class EliteInput extends LitElement {
     this.inputStyles = ''; 
     this.noteStyles = ''; 
     this.errorStyles = '';
-    this.options = [];
+    this.error = {};
+    this.showIndex = false;
+    this.showVal = false;
   }
 
   render() {
@@ -74,53 +81,98 @@ export class EliteInput extends LitElement {
     for (let err in this.error) {
       error.push(html`<li>${this.error[err]}</li>`)
     }
-
     if (this.type === 'radio' || this.type === 'checkbox') {
+      return html`
+        <label>${this.label}</label><br>
+        <div @change=${this.handleBox} id=${this.name}>
+          ${this.options.map((option) => html `
+            <input
+              type=${this.type}
+              name=${this.name}
+              class=${this.name}
+              value=${option.value}
+            >${option.option}<br>
+          `
+          )}
+        <ul 
+          class="error" 
+          style=${styleMap(this.errorStyles)}>
+          ${error} 
+        </ul>
+        </div>
+      `;
+    } 
+    else if (this.type === 'select') {
       return html `
       <label>${this.label}</label><br>
+      <select id=${this.id} name=${this.name} @change=${this.handleInput}/>
       ${this.options.map((option) => 
         html `
-          <input 
-            id=${option.optionId}
-            type=${this.type}
-            name=${this.name}
-            value=${option.value}
-            @change=${this.handleInput}
-          />${option.option}<br>
-        `
-      )}
+         <option value=${option.value}>${option.option}</option>
+        `)}
+      `
+    } else if (this.type === 'multiselect') {
+      return html `
+      <label>${this.label}</label><br>
+      <select id=${this.id} name=${this.name} @change=${this.handleInput} multiple/>
+      ${this.options.map((option) => 
+        html `
+         <option value=${option.value}>${option.option}</option>
+        `)}
       `
     }
     else {
       return html`
-        <div class='elite-form' style=${styleMap(this.styles)}>
-          <label 
-            for=${this.id}
-            style=${styleMap(this.labelStyles)}>
-              ${this.label && this.label}
-          </label>
+      <div class='elite-form' style=${styleMap(this.styles)}>
+        <label 
+          for=${this.id}
+          style=${styleMap(this.labelStyles)}>
+            ${this.label && this.label}
+        </label>
+        <span>
+          <span ?hidden=${!this.showIndex}>${this.min}</span>
           <input 
             id=${this.id} 
             type=${this.type}
             @input=${this.handleInput} 
             @blur=${this.handleBlur}
             placeholder=${this.placeholder} 
-            style=${styleMap(this.inputStyles)}
-          >
-          <div
-            class="note" 
-            ?hidden=${!this.note} 
-            style=${styleMap(this.noteStyles)}>
-              ${this.note}
-          </div>
-          <ul 
-            class="error" 
-            style=${styleMap(this.errorStyles)}>
-            ${error} 
-          </ul>
+            min=${this.min}
+            max=${this.max}
+            style=${styleMap(this.inputStyles)}>
+          <span ?hidden=${!this.showIndex}>${this.max}</span>
+        </span>
+        <div ?hidden=${!this.showVal}>${this.value}</div>
+        <div 
+          class="note" 
+          ?hidden=${!this.note} 
+          style=${styleMap(this.noteStyles)}>
+            ${this.note}
         </div>
-      `;
+        <ul 
+          class="error" 
+          style=${styleMap(this.errorStyles)}>
+            ${error} 
+        </ul>
+      </div>
+    `;
     }
+  }
+
+  handleBox(event) {
+    const form = this.shadowRoot.querySelectorAll(`.${this.name}`)
+    const response = []
+    for (let input in form) {
+      if (!isNaN(Number(input))) {
+        const { checked, value } = form[input]
+        if (checked) response.push(value)
+        else {
+          response.slice(response.indexOf(value),1)
+        }
+      }
+    }
+    this.value = response
+    this.handleValidation()
   }
 
   withDebounce = debounce(() => this.handleValidation(), 500)
