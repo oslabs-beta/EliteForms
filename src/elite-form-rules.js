@@ -161,6 +161,38 @@ const internalValMethods = {
     return err;
   },
 
+  minWords: function(node, devInput) {
+    const regex = /[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]/g;
+    const wordArr = node.value.replace(regex, '').split(' ').filter(elem => elem);
+    let error = false;
+    const name = node.validationName || node.name || node.type;
+    const message = typeof(node.value) === 'string' ? `The minimun number of words of ${name} is ${devInput} words` : `You may only select ${devInput} ${name}`
+    if (wordArr.length < devInput){
+      error = true;
+    }
+    const err = {
+      message: error ? message : null,
+      error: error
+    }
+    return err;
+  },
+
+  maxWords: function(node, devInput) {
+    const regex = /[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]/g;
+    const wordArr = node.value.replace(regex, '').split(' ').filter(elem => elem);
+    let error = false;
+    const name = node.validationName || node.name || node.type;
+    const message = typeof(node.value) === 'string' ? `The maximun number of words of ${name} is ${devInput} words` : `You may only select ${devInput} ${name}`
+    if (wordArr.length > devInput){
+      error = true;
+    }
+    const err = {
+      message: error ? message : null,
+      error: error
+    }
+    return err;
+  },
+
   between: function(node, devInput) { // devInput is an array of [min, max]
     let error = true;
     const name = node.validationName || node.name || node.type;
