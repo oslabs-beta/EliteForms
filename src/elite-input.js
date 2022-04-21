@@ -43,6 +43,11 @@ export class EliteInput extends LitElement {
     errors: {},
     errorBehavior: {}, 
     validationName: {},
+    options: {},
+    min: {},
+    max: {},
+    showIndex: {},
+    showVal: {},
   }
 
   static state = {
@@ -66,7 +71,9 @@ export class EliteInput extends LitElement {
     this.inputStyles = ''; 
     this.noteStyles = ''; 
     this.errorStyles = '';
-    this.options = [];
+    this.error = {};
+    this.showIndex = false;
+    this.showVal = false;
   }
 
   render() {
@@ -74,7 +81,28 @@ export class EliteInput extends LitElement {
     for (let err in this.error) {
       error.push(html`<li>${this.error[err]}</li>`)
     }
-
+    if (this.type === 'radio' || this.type === 'checkbox') {
+      return html`
+        <label>${this.label}</label><br>
+        <div @change=${this.handleBox} id=${this.name}>
+          ${this.options.map((option) => html `
+            <input
+              type=${this.type}
+              name=${this.name}
+              class=${this.name}
+              value=${option.value}
+            >${option.option}<br>
+          `
+          )}
+        <ul 
+          class="error" 
+          style=${styleMap(this.errorStyles)}>
+          ${error} 
+        </ul>
+        </div>
+      `;
+    } 
+    else {
       return html`
       <div class='elite-form' style=${styleMap(this.styles)}>
         <label 
@@ -82,13 +110,20 @@ export class EliteInput extends LitElement {
           style=${styleMap(this.labelStyles)}>
             ${this.label && this.label}
         </label>
-        <input 
-          id=${this.id} 
-          type=${this.type}
-          @input=${this.handleInput} 
-          @blur=${this.handleBlur}
-          placeholder=${this.placeholder} 
-          style=${styleMap(this.inputStyles)}>
+        <span>
+          <span ?hidden=${!this.showIndex}>${this.min}</span>
+          <input 
+            id=${this.id} 
+            type=${this.type}
+            @input=${this.handleInput} 
+            @blur=${this.handleBlur}
+            placeholder=${this.placeholder} 
+            min=${this.min}
+            max=${this.max}
+            style=${styleMap(this.inputStyles)}>
+          <span ?hidden=${!this.showIndex}>${this.max}</span>
+        </span>
+        <div ?hidden=${!this.showVal}>${this.value}</div>
         <div 
           class="note" 
           ?hidden=${!this.note} 
@@ -102,6 +137,23 @@ export class EliteInput extends LitElement {
         </ul>
       </div>
     `;
+    }
+  }
+
+  handleBox(event) {
+    const form = this.shadowRoot.querySelectorAll(`.${this.name}`)
+    const response = []
+    for (let input in form) {
+      if (!isNaN(Number(input))) {
+        const { checked, value } = form[input]
+        if (checked) response.push(value)
+        else {
+          response.slice(response.indexOf(value),1)
+        }
+      }
+    }
+    this.value = response
+    this.handleValidation()
   }
 
   withDebounce = debounce(() => this.handleValidation(), 500)
