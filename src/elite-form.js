@@ -159,6 +159,7 @@ export class EliteForm extends LitElement {
     // console.log(fields)
     let fieldsCheck = true
     const cache = {}
+    // console.log(fields[0].id)
 
     for (let singleElement in fields) {
       const currentElement = fields[singleElement]
@@ -179,6 +180,8 @@ export class EliteForm extends LitElement {
             currentElement.handleValidation()
           }
           cache[currentElement.id] = currentElement.value
+          // console.log(cache)
+          // console.log(currentElement.error)
           if (Object.keys(currentElement.error).length > 0) fieldsCheck = false
         } else {
           const { id, value } = fields[singleElement]

@@ -83,8 +83,8 @@ const internalValMethods = {
   required: function(node) { // node = the 'this' keyword. we need access to state
     const name = node.validationName || node.name || node.type
     const err = {
-      message: !node.value ? `${name} is required.` : null,
-      error: !node.value ? true : false
+      message: !node.value || (Array.isArray(node.value) && !node.value.length) ? `${name} is required.` : null,
+      error: !node.value || (Array.isArray(node.value) && !node.value.length) ? true : false
     }
     return err // ***** switched this to return the object in order to collate all the errors
   },
@@ -136,11 +136,12 @@ const internalValMethods = {
   min: function(node, devInput) {
     let error = true;
     const name = node.validationName || node.name || node.type
+    const message = typeof(node.value) === 'string' ? `${name} must be at least ${devInput} characters long` : `You must select at least ${devInput} ${name} `
     if (node.value && node.value.length >= devInput){
       error = false;
     }
     const err = {
-      message: error ? `${name} must be at least ${devInput} characters long` : null,
+      message: error ? message : null,
       error: error
     }
     return err;
@@ -149,11 +150,12 @@ const internalValMethods = {
   max: function(node, devInput) {
     let error = false;
     const name = node.validationName || node.name || node.type;
+    const message = typeof(node.value) === 'string' ? `The maximun number of characters of ${name} is ${devInput} characters long` : `You may only select ${devInput} ${name}`
     if (node.value && node.value.length > devInput){
       error = true;
     }
     const err = {
-      message: error ? `The maximun number of characters of ${name} is ${devInput} characters long` : null,
+      message: error ? message : null,
       error: error
     }
     return err;
