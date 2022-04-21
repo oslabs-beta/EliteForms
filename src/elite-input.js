@@ -48,6 +48,7 @@ export class EliteInput extends LitElement {
     max: {},
     showIndex: {},
     showVal: {},
+    defaultHidden: {}
   }
 
   static state = {
@@ -74,6 +75,7 @@ export class EliteInput extends LitElement {
     this.error = {};
     this.showIndex = false;
     this.showVal = false;
+    this.defaultHidden = 'select an option'
   }
 
   render() {
