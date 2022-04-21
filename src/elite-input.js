@@ -119,21 +119,6 @@ export class EliteInput extends LitElement {
         </ul>
       `
     } 
-    // else if (this.type === 'multiselect') {
-    //   return html `
-    //   <label>${this.label}</label><br>
-    //   <select id=${this.id} name=${this.name} @change=${this.handleInput} multiple/>
-    //   ${this.options.map((option) => 
-    //     html `
-    //      <option value=${option.value}>${option.option}</option>
-    //     `)}
-    //     <ul 
-    //       class="error" 
-    //       style=${styleMap(this.errorStyles)}>
-    //       ${error} 
-    //     </ul>
-    //   `
-    // }
     else {
       return html`
       <div class='elite-form' style=${styleMap(this.styles)}>
@@ -169,17 +154,6 @@ export class EliteInput extends LitElement {
         </ul>
       </div>
     `;
-    }
-  }
-
-  showCheckboxes() {
-    const checkboxes = document.getElementById("checkboxes")
-    if (!expanded) {
-      checkboxes.style.display = 'block'
-      expanded = true
-    } else {
-      checkboxes.style.display = 'non'
-      expanded = false
     }
   }
 
