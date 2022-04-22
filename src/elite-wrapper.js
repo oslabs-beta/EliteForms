@@ -120,6 +120,7 @@ export class EliteForm extends LitElement {
     this.badFormMessage = 'Missing Fields'
   }
 
+  
   render() {
     return html`
       <div>

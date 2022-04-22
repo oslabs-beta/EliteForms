@@ -2,6 +2,7 @@ import {LitElement, html, css} from 'lit';
 import {styleMap} from 'lit/directives/style-map.js';
 import internalValMethods from 'elite-forms/src/elite-form-rules'
 import debounce from 'elite-forms/src/debounce'
+import context from 'elite-forms/src/context'
 
 export class EliteInput extends LitElement {
   static get styles() {
@@ -48,12 +49,13 @@ export class EliteInput extends LitElement {
     max: {},
     showIndex: {},
     showVal: {},
-    defaultHidden: {}
+    defaultHidden: {},
+    conditional: {}
   }
 
   static state = {
     internalValMethods: internalValMethods, 
-    debounce: debounce
+    debounce: debounce,
   }
 
   constructor() {
@@ -75,13 +77,27 @@ export class EliteInput extends LitElement {
     this.error = {};
     this.showIndex = false;
     this.showVal = false;
-    this.defaultHidden = 'select an option'
+    this.defaultHidden = 'select an option';
+    this.context = context;
   }
 
   render() {
+    console.log('context: ', this.context)
+    console.log('typeof conditional ', typeof this.conditional)
     const error = []
     for (let err in this.error) {
       error.push(html`<li>${this.error[err]}</li>`)
+    }
+
+    if (typeof this.conditional === 'function') {
+      // console.log('conditional in render: ', this.conditional)
+      const result = this.handleConditional(this.conditional) || false
+      console.log('result: ', result)
+      if (result === true) {
+        return html`<div>I rendered</div>`
+      } else {
+        return null
+      }
     }
     if (this.type === 'radio' || this.type === 'checkbox') {
       return html`
@@ -106,6 +122,7 @@ export class EliteInput extends LitElement {
     } 
     else if (this.type === 'select') {
       return html `
+      <div class='elite-form' style=${styleMap(this.styles)}>
         <label>${this.label}</label><br>
         <select id=${this.id} name=${this.name} @change=${this.handleInput}>
         <option value='none' selected disabled hidden>${this.defaultHidden}</option>
@@ -119,6 +136,7 @@ export class EliteInput extends LitElement {
           style=${styleMap(this.errorStyles)}>
           ${error} 
         </ul>
+      </div>
       `
     } 
     else {
@@ -159,6 +177,15 @@ export class EliteInput extends LitElement {
     }
   }
 
+  handleConditional(func) {
+    // console.log('inside handleConditional func')
+    console.log('handleConditional func: ', func)
+    console.log('context in handleConditional: ', this.context)
+    const boolean = func(this.context)
+    console.log(boolean)
+    return boolean
+  }
+
   handleBox(event) {
     const form = this.shadowRoot.querySelectorAll(`.${this.name}`)
     const response = []
@@ -188,6 +215,12 @@ export class EliteInput extends LitElement {
   handleInput(event) {
     const { value } = event.target;
     this.value = value
+    if (!this.context[this.name]) {
+      this.context[this.name] = this.value
+    } else {
+      this.context[this.name] = this.value
+    }
+    // console.log(this.context)
     if (this.errorBehavior === 'debounce') {
       this.withDebounce()    
     } else {

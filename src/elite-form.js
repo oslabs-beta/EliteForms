@@ -125,11 +125,26 @@ export class EliteForm extends LitElement {
     this.error = true
     this.buttonName = 'Submit'
     this.badFormMessage = '!! Missing Fields !!'
+    this.context = 'hello context'
   }
 
+  // handleSlotchange(e) {
+  //   const childNodes = this.shadowRoot.querySelector('slot')?.assignedElements({ flatten: true })
+  //   // ... do something with childNodes ...
+  //   console.log('childNodes: ', childNodes)
+  //   childNodes?.forEach(child => {
+  //     console.log('root: ', child.shadowRoot?.)
+  //   })
+  //   // this.allText = childNodes.map((node) => {
+  //   //   return node.textContent ? node.textContent : ''
+  //   // }).join('');
+  // }
+
   render() {
+    // this.handleSlotchange()
     return html`
       <div>
+        <!-- <slot @slotchange=${this.handleSlotchange}></slot> -->
         <slot></slot>
         <button 
           class='btn block-cube block-cube-hover' 
