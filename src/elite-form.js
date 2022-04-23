@@ -1,4 +1,5 @@
 import {LitElement, html, css} from 'lit';
+import context from 'elite-forms/src/context'
 
 export class EliteForm extends LitElement {
   static styles = css`
@@ -143,9 +144,9 @@ export class EliteForm extends LitElement {
   render() {
     // this.handleSlotchange()
     return html`
-      <div>
+      <div >
         <!-- <slot @slotchange=${this.handleSlotchange}></slot> -->
-        <slot></slot>
+        <slot .context=${this.context}></slot>
         <button 
           class='btn block-cube block-cube-hover' 
           @click=${() => this.validateForm(this.onSubmit, this.arr)}>

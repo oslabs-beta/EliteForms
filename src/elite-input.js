@@ -50,7 +50,8 @@ export class EliteInput extends LitElement {
     showIndex: {},
     showVal: {},
     defaultHidden: {},
-    conditional: {}
+    conditional: {},
+    conditionalField: {}
   }
 
   static state = {
@@ -79,6 +80,9 @@ export class EliteInput extends LitElement {
     this.showVal = false;
     this.defaultHidden = 'select an option';
     this.context = context;
+    this.conditionalType = '';
+    this.conditionalName = '';
+    this.conditionalLabel = '';
   }
 
   render() {
@@ -89,15 +93,52 @@ export class EliteInput extends LitElement {
       error.push(html`<li>${this.error[err]}</li>`)
     }
 
-    if (typeof this.conditional === 'function') {
-      // console.log('conditional in render: ', this.conditional)
-      const result = this.handleConditional(this.conditional) || false
+    if (this.conditional) {
+      console.log('this.conditional: ', this.conditional)
+      console.log('this.conditionalField: ', this.conditionalField)
+      const result = this.handleConditional(this.conditional)
       console.log('result: ', result)
-      if (result === true) {
-        return html`<div>I rendered</div>`
-      } else {
-        return null
-      }
+      if (result === true && this.conditionalField.type === 'text') {
+        this.conditionalType = this.conditionalField.type
+        this.conditionalLabel = this.conditionalField.label
+        this.conditionalName = this.conditionalField.name
+        this.conditionalPlaceholder = this.conditionalField.placeholder
+        return html`
+          <div class='elite-form' style=${styleMap(this.styles)}>
+            <label 
+              for=${this.id}
+              style=${styleMap(this.labelStyles)}>
+                ${this.conditionalLabel && this.conditionalLabel}
+            </label>
+            <span>
+              <span ?hidden=${!this.showIndex}>${this.min}</span>
+              <input 
+                id=${this.id} 
+                name=${this.conditionalName}
+                type=${this.conditionalType}
+                @input=${this.handleInput} 
+                @blur=${this.handleBlur}
+                placeholder=${this.conditionalPlaceholder} 
+                min=${this.min}
+                max=${this.max}
+                style=${styleMap(this.inputStyles)}>
+              <span ?hidden=${!this.showIndex}>${this.max}</span>
+            </span>
+            <div ?hidden=${!this.showVal}>${this.value}</div>
+            <div 
+              class="note" 
+              ?hidden=${!this.note} 
+              style=${styleMap(this.noteStyles)}>
+                ${this.note}
+            </div>
+            <ul 
+              class="error" 
+              style=${styleMap(this.errorStyles)}>
+                ${error} 
+            </ul>
+          </div>
+          `
+      } 
     }
     if (this.type === 'radio' || this.type === 'checkbox') {
       return html`
@@ -179,8 +220,8 @@ export class EliteInput extends LitElement {
 
   handleConditional(func) {
     // console.log('inside handleConditional func')
-    console.log('handleConditional func: ', func)
-    console.log('context in handleConditional: ', this.context)
+    // console.log('handleConditional func: ', func)
+    // console.log('context in handleConditional: ', this.context)
     const boolean = func(this.context)
     console.log(boolean)
     return boolean
