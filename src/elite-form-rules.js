@@ -136,9 +136,17 @@ const internalValMethods = {
   min: function(node, devInput) {
     let error = true;
     const name = node.validationName || node.name || node.type
-    const message = typeof(node.value) === 'string' ? `${name} must be at least ${devInput} characters long` : `You must select at least ${devInput} ${name} `
-    if (node.value && node.value.length >= devInput){
-      error = false;
+    let message
+
+    if (node.type === 'range') {
+      const value = Number(node.value)
+      message = `${name} must be greater than ${devInput}`
+      if (value >= devInput) error = false
+    } else {
+      message = typeof(node.value) === 'string' ? `${name} must be at least ${devInput} characters long` : `You must select at least ${devInput} ${name} `
+      if (node.value && node.value.length >= devInput){
+        error = false;
+      }
     }
     const err = {
       message: error ? message : null,
@@ -150,8 +158,48 @@ const internalValMethods = {
   max: function(node, devInput) {
     let error = false;
     const name = node.validationName || node.name || node.type;
-    const message = typeof(node.value) === 'string' ? `The maximun number of characters of ${name} is ${devInput} characters long` : `You may only select ${devInput} ${name}`
-    if (node.value && node.value.length > devInput){
+    let message
+
+    if (node.type === 'range') {
+      const value = Number(node.value)
+      message = `${name} must be less than ${devInput}`
+      if (value > devInput) error = true
+    } else {
+      message = typeof(node.value) === 'string' ? `The maximun number of characters of ${name} is ${devInput} characters long` : `You may only select ${devInput} ${name}`
+      if (node.value && node.value.length > devInput){
+        error = true;
+      }
+    }
+    const err = {
+      message: error ? message : null,
+      error: error
+    }
+    return err;
+  },
+
+  minWords: function(node, devInput) {
+    const regex = /[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]/g;
+    const wordArr = node.value.replace(regex, '').split(' ').filter(elem => elem);
+    let error = false;
+    const name = node.validationName || node.name || node.type;
+    const message = typeof(node.value) === 'string' ? `The minimun number of words of ${name} is ${devInput} words` : `You may only select ${devInput} ${name}`
+    if (wordArr.length < devInput){
+      error = true;
+    }
+    const err = {
+      message: error ? message : null,
+      error: error
+    }
+    return err;
+  },
+
+  maxWords: function(node, devInput) {
+    const regex = /[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]/g;
+    const wordArr = node.value.replace(regex, '').split(' ').filter(elem => elem);
+    let error = false;
+    const name = node.validationName || node.name || node.type;
+    const message = typeof(node.value) === 'string' ? `The maximun number of words of ${name} is ${devInput} words` : `You may only select ${devInput} ${name}`
+    if (wordArr.length > devInput){
       error = true;
     }
     const err = {
@@ -164,11 +212,20 @@ const internalValMethods = {
   between: function(node, devInput) { // devInput is an array of [min, max]
     let error = true;
     const name = node.validationName || node.name || node.type;
-    if (node.value && node.value.length >= devInput[0] && node.value.length <= devInput[1]) {
-      error = false;
+    let message
+
+    if (node.type === 'range') {
+      const value = Number(node.value)
+      message = `${name} must be between ${devInput[0]} and ${devInput[1]}`
+      if (value >= devInput[0] && value <= devInput[1]) error = false
+    } else {
+      message = `${name} must be in between ${devInput[0]} and ${devInput[1]} characters long`
+      if (node.value && node.value.length >= devInput[0] && node.value.length <= devInput[1]) {
+        error = false;
+      }
     }
     const err = {
-      message: error ? `${name} must be in between ${devInput[0]} and ${devInput[1]} characters long` : null,
+      message: error ? message : null,
       error: error
     }
     return err;
@@ -256,7 +313,76 @@ const internalValMethods = {
       error: error
     }
     return err // ***** switched this to return the object in order to collate all the errors
-  }
+  },
+
+  before: function(node, devInput) {
+    let error = true;
+    const name = node.validationName || node.name || node.type
+    let message
+
+    //convert input date to year month day
+    const { value } = node
+    console.log(value)
+    let year = ''
+    let month = ''
+    let day = ''
+    let dashCount = 0
+    for (let i = 0; i < value.length; i++) {
+      if (value[i] === '-') dashCount += 1
+      else if (dashCount === 0) year += value[i]
+      else if (dashCount === 1) month += value[i]
+      else day += value[i]
+    }
+    year = Number(year)
+    month = Number(month)
+    day = Number(day)
+
+    if (year < devInput[0] || (year === devInput[0] && month < devInput[1]) || (year === devInput[0] && month === devInput[1] && day <= devInput[2])) error = false
+    let dat = devInput[0].toString()
+    if (devInput[1]) dat = devInput[1].toString() + '/' + dat
+    if (devInput[2]) dat = devInput[1].toString() + '/' + devInput[2].toString() + '/' + devInput[0].toString()
+    message = `${name} must be before ${dat}`
+
+    const err = {
+      message: error ? message : null,
+      error: error
+    }
+    return err;
+  },
+
+  after: function(node, devInput) {
+    let error = true;
+    const name = node.validationName || node.name || node.type
+    let message
+
+    //convert input date to year month day
+    const { value } = node
+    let year = ''
+    let month = ''
+    let day = ''
+    let dashCount = 0
+    for (let i = 0; i < value.length; i++) {
+      if (value[i] === '-') dashCount += 1
+      else if (dashCount === 0) year += value[i]
+      else if (dashCount === 1) month += value[i]
+      else day += value[i]
+    }
+    year = Number(year)
+    month = Number(month)
+    day = Number(day)
+
+    if (year > devInput[0] || (year === devInput[0] && month > devInput[1]) || (year === devInput[0] && month === devInput[1] && day >= devInput[2])) error = false
+    let dat = devInput[0].toString()
+    if (devInput[1]) dat = devInput[1].toString() + '/' + dat
+    if (devInput[2]) dat = devInput[1].toString() + '/' + devInput[2].toString() + '/' + devInput[0].toString()
+    message = `${name} must be after ${dat}`
+
+    const err = {
+      message: error ? message : null,
+      error: error
+    }
+    return err;
+  },
 }
 
 export default internalValMethods;
