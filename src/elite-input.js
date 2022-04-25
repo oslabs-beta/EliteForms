@@ -47,13 +47,11 @@ export class EliteInput extends LitElement {
     max: {},
     showIndex: {},
     showVal: {},
-<<<<<<< HEAD
     conditional: {},
-=======
     row: {},
     cols: {},
     showWordCount: {},
->>>>>>> dev
+    defaultHidden: {}
   }
 
   static state = {
@@ -85,6 +83,7 @@ export class EliteInput extends LitElement {
     this.row = '4'; // text area default row
     this.cols = '50'; // text area default columns
     this.showWordCount = true;
+    this.defaultHidden = ' select one option'
   }
 
   render() {
