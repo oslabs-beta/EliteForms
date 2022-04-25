@@ -26,7 +26,6 @@ export class EliteInput extends LitElement {
       ul {
         list-style-type: "✕ ";
       }
-     
   `}
 
   static properties = {
@@ -48,6 +47,13 @@ export class EliteInput extends LitElement {
     max: {},
     showIndex: {},
     showVal: {},
+<<<<<<< HEAD
+    conditional: {},
+=======
+    row: {},
+    cols: {},
+    showWordCount: {},
+>>>>>>> dev
   }
 
   static state = {
@@ -71,9 +77,14 @@ export class EliteInput extends LitElement {
     this.inputStyles = ''; 
     this.noteStyles = ''; 
     this.errorStyles = '';
+    this.showWordCountStyles = '';
     this.error = {};
     this.showIndex = false;
     this.showVal = false;
+    this.conditionalBool = true;
+    this.row = '4'; // text area default row
+    this.cols = '50'; // text area default columns
+    this.showWordCount = true;
   }
 
   render() {
@@ -81,27 +92,85 @@ export class EliteInput extends LitElement {
     for (let err in this.error) {
       error.push(html`<li>${this.error[err]}</li>`)
     }
+    
     if (this.type === 'radio' || this.type === 'checkbox') {
       return html`
-        <label>${this.label}</label><br>
-        <div @change=${this.handleBox} id=${this.name}>
-          ${this.options.map((option) => html `
-            <input
-              type=${this.type}
-              name=${this.name}
-              class=${this.name}
-              value=${option.value}
-            >${option.option}<br>
-          `
-          )}
-        <ul 
-          class="error" 
-          style=${styleMap(this.errorStyles)}>
-          ${error} 
-        </ul>
+        <div class='elite-form' style=${styleMap(this.styles)}>
+          <label>${this.label}</label><br>
+          <div @change=${this.handleBox} id=${this.name}>
+            ${this.options.map((option) => html `
+              <input
+                type=${this.type}
+                name=${this.name}
+                class=${this.name}
+                value=${option.value}
+              >${option.option}<br>
+            `
+            )}
+          <ul 
+            class="error" 
+            style=${styleMap(this.errorStyles)}>
+            ${error} 
+          </ul>
+          </div>
         </div>
       `;
     } 
+    else if (this.type === 'select') {
+      return html `
+        <div class='elite-form' style=${styleMap(this.styles)}>
+          <label>${this.label}</label><br>
+          <select id=${this.id} name=${this.name} @change=${this.handleInput}>
+          <option value='none' selected disabled hidden>${this.defaultHidden}</option>
+          ${this.options.map((option) => 
+            html `
+            <option value=${option.value}>${option.option}</option>
+            `)}
+          </select>
+          <ul 
+            class="error" 
+            style=${styleMap(this.errorStyles)}>
+            ${error} 
+          </ul>
+        </div>
+      `
+    } 
+    else if (this.type === 'textarea') {
+      return html `
+      <div class='elite-form' style=${styleMap(this.styles)}>
+        <label 
+          for=${this.id}
+          style=${styleMap(this.labelStyles)}>
+            ${this.label && this.label}
+        </label>
+        <textarea
+          id=${this.id}
+          @input=${this.handleInput} 
+          @blur=${this.handleBlur}
+          placeholder=${this.placeholder}
+          style=${styleMap(this.inputStyles)}
+          row=${this.row}
+          cols=${this.cols}></textarea>
+        <div
+          class="showWordCount" 
+          ?hidden=${this.showWordCount === 'false'}
+          style=${styleMap(this.showWordCountStyles)}>
+            Current count is ${this.countWords()} words.
+        </div>
+        <div 
+          class="note" 
+          ?hidden=${!this.note} 
+          style=${styleMap(this.noteStyles)}>
+            ${this.note}
+        </div>
+        <ul 
+          class="error" 
+          style=${styleMap(this.errorStyles)}>
+            ${error} 
+        </ul>
+      </div>
+      `
+    }
     else {
       return html`
       <div class='elite-form' style=${styleMap(this.styles)}>
@@ -136,7 +205,30 @@ export class EliteInput extends LitElement {
             ${error} 
         </ul>
       </div>
+      <div ?hidden=${this.conditionalBool}>
+        <slot>
+        </slot>
+      </div>
     `;
+    }
+  }
+
+  handleConditional() {
+    if (this.value === this.conditional[0]) {
+      this.conditionalBool = false
+    } else {
+      this.conditionalBool = true
+    }
+  }
+
+  countWords() {
+    if (!this.value) {
+      return 0;
+    }
+    else {
+      const regex = /[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]/g;
+      const wordArr = this.value.replace(regex, '').split(' ').filter(elem => elem);
+      return wordArr.length;
     }
   }
 
@@ -162,6 +254,7 @@ export class EliteInput extends LitElement {
     if (this.errorBehavior === 'blur') {
       const { value } = event.target;
       this.value = value
+      if (this.conditional) this.handleConditional()
       this.handleValidation()
     }
   }
@@ -170,9 +263,12 @@ export class EliteInput extends LitElement {
     const { value } = event.target;
     this.value = value
     if (this.errorBehavior === 'debounce') {
+      if (this.conditional) this.handleConditional()
       this.withDebounce()    
     } else {
       if (this.errorBehavior !== 'blur') {
+        console.log('hahaha')
+        if (this.conditional) this.handleConditional()
         this.handleValidation()
       }
     }
