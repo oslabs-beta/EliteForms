@@ -48,6 +48,7 @@ export class EliteInput extends LitElement {
     max: {},
     showIndex: {},
     showVal: {},
+    conditional: {},
   }
 
   static state = {
@@ -74,6 +75,7 @@ export class EliteInput extends LitElement {
     this.error = {};
     this.showIndex = false;
     this.showVal = false;
+    this.conditionalBool = true;
   }
 
   render() {
@@ -153,7 +155,19 @@ export class EliteInput extends LitElement {
             ${error} 
         </ul>
       </div>
+      <div ?hidden=${this.conditionalBool}>
+        <slot>
+        </slot>
+      </div>
     `;
+    }
+  }
+
+  handleConditional() {
+    if (this.value === this.conditional[0]) {
+      this.conditionalBool = false
+    } else {
+      this.conditionalBool = true
     }
   }
 
@@ -179,6 +193,7 @@ export class EliteInput extends LitElement {
     if (this.errorBehavior === 'blur') {
       const { value } = event.target;
       this.value = value
+      if (this.conditional) this.handleConditional()
       this.handleValidation()
     }
   }
@@ -187,9 +202,12 @@ export class EliteInput extends LitElement {
     const { value } = event.target;
     this.value = value
     if (this.errorBehavior === 'debounce') {
+      if (this.conditional) this.handleConditional()
       this.withDebounce()    
     } else {
       if (this.errorBehavior !== 'blur') {
+        console.log('hahaha')
+        if (this.conditional) this.handleConditional()
         this.handleValidation()
       }
     }
