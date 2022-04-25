@@ -4,12 +4,11 @@ import internalValMethods from 'elite-forms/src/elite-form-rules'
 import debounce from 'elite-forms/src/debounce'
 
 export class EliteInput extends LitElement {
-  static get styles() {
-    return css`
+  static styles = css`
       :host {
           font-family: monospace;
       }
-      .elite-form {
+      .elite-input-container {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -26,7 +25,7 @@ export class EliteInput extends LitElement {
       ul {
         list-style-type: "✕ ";
       }
-  `}
+  `;
 
   static properties = {
     eliteForm: {},
@@ -94,7 +93,7 @@ export class EliteInput extends LitElement {
     
     if (this.type === 'radio' || this.type === 'checkbox') {
       return html`
-        <div class='elite-form' style=${styleMap(this.styles)}>
+        <div class='elite-input-container' style=${styleMap(this.styles)}>
           <label>${this.label}</label><br>
           <div @change=${this.handleBox} id=${this.name}>
             ${this.options.map((option) => html `
@@ -117,7 +116,7 @@ export class EliteInput extends LitElement {
     } 
     else if (this.type === 'select') {
       return html `
-        <div class='elite-form' style=${styleMap(this.styles)}>
+        <div class='elite-input-container' style=${styleMap(this.styles)}>
           <label>${this.label}</label><br>
           <select id=${this.id} name=${this.name} @change=${this.handleInput}>
           <option value='none' selected disabled hidden>${this.defaultHidden}</option>
@@ -136,14 +135,16 @@ export class EliteInput extends LitElement {
     } 
     else if (this.type === 'textarea') {
       return html `
-      <div class='elite-form' style=${styleMap(this.styles)}>
+      <div class='elite-input-container' style=${styleMap(this.styles)}>
         <label 
+          class='label'
           for=${this.id}
           style=${styleMap(this.labelStyles)}>
             ${this.label && this.label}
         </label>
         <textarea
           id=${this.id}
+          class='input'
           @input=${this.handleInput} 
           @blur=${this.handleBlur}
           placeholder=${this.placeholder}
@@ -151,19 +152,19 @@ export class EliteInput extends LitElement {
           row=${this.row}
           cols=${this.cols}></textarea>
         <div
-          class="showWordCount" 
+          class='showWordCount'
           ?hidden=${this.showWordCount === 'false'}
           style=${styleMap(this.showWordCountStyles)}>
             Current count is ${this.countWords()} words.
         </div>
         <div 
-          class="note" 
+          class='note' 
           ?hidden=${!this.note} 
           style=${styleMap(this.noteStyles)}>
             ${this.note}
         </div>
         <ul 
-          class="error" 
+          class='error' 
           style=${styleMap(this.errorStyles)}>
             ${error} 
         </ul>

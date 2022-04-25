@@ -101,8 +101,15 @@ export class EliteForm extends LitElement {
     .text:hover {
       color: white;
     }
-
     /* styling for the submit button ends*/
+
+    #sbm-err-msg {
+      color: #C70039;
+      font-weight: bold;
+      font-size: 2em;
+      text-align: center;
+    }
+
   `;
 
   static properties = {
@@ -117,7 +124,7 @@ export class EliteForm extends LitElement {
     super();
     this.error = true
     this.buttonName = 'Submit'
-    this.badFormMessage = 'Missing Fields'
+    this.badFormMessage = '!! Missing Fields !!'
   }
 
   render() {
@@ -142,7 +149,7 @@ export class EliteForm extends LitElement {
           </div>
         <!-- divs for styling ends -->
         </button>
-        <div ?hidden=${this.error}>${this.badFormMessage}</div>
+        <div id='sbm-err-msg' ?hidden=${this.error}>${this.badFormMessage}</div>
       </div>
     `;
   }
@@ -152,6 +159,7 @@ export class EliteForm extends LitElement {
     // console.log(fields)
     let fieldsCheck = true
     const cache = {}
+    // console.log(fields[0].id)
 
     for (let singleElement in fields) {
       const currentElement = fields[singleElement]
@@ -172,6 +180,8 @@ export class EliteForm extends LitElement {
             currentElement.handleValidation()
           }
           cache[currentElement.id] = currentElement.value
+          // console.log(cache)
+          // console.log(currentElement.error)
           if (Object.keys(currentElement.error).length > 0) fieldsCheck = false
         } else {
           const { id, value } = fields[singleElement]

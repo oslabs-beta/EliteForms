@@ -21,95 +21,6 @@ export class EliteForm extends LitElement {
       font-size: 16px;
     }
 
-    .block-cube {
-      position: relative;
-    }
-    .block-cube .bg-top {
-      position: absolute;
-      height: 10px;
-      background: #ffffff;
-      background: linear-gradient(90deg, #020024 0%, #340979 37%, #00d4ff 94%);
-      bottom: 100%;
-      left: 5px;
-      right: -5px;
-      transform: skew(-45deg, 0);
-      margin: 0;
-    }
-    .block-cube .bg-top .bg-inner {
-      bottom: 0;
-    }
-    .block-cube .bg {
-      position: absolute;
-      left: 0;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      background: #ffffff;
-      background: linear-gradient(90deg, #020024 0%, #340979 37%, #00d4ff 94%);
-    }
-    .block-cube .bg-right {
-      position: absolute;
-      background: #ffffff;
-      background: #00d4ff;
-      top: -5px;
-      z-index: 0;
-      bottom: 5px;
-      width: 10px;
-      left: 100%;
-      transform: skew(0, -45deg);
-    }
-    
-    .block-cube .bg-right .bg-inner {
-      left: 0;
-    }
-    .block-cube .bg .bg-inner {
-      transition: all 0.2s ease-in-out;
-    }
-    .block-cube .bg-inner {
-      background: #ffffff;
-      position: absolute;
-      left: 2px;
-      top: 2px;
-      right: 2px;
-      bottom: 2px;
-    }
-    .block-cube .text {
-      position: relative;
-      z-index: 2;
-    }
-    .block-cube.block-input input {
-      position: relative;
-      z-index: 2;
-    }
-  
-    .block-cube.block-input .bg-top,
-    .block-cube.block-input .bg-right,
-    .block-cube.block-input .bg {
-      background: rgba(255, 255, 255, 0.5);
-      transition: background 0.2s ease-in-out;
-    }
-    .block-cube.block-input .bg-right .bg-inner,
-    .block-cube.block-input .bg-top .bg-inner {
-      transition: all 0.2s ease-in-out;
-    }
-  
-    .block-cube.block-cube-hover:focus .bg .bg-inner, 
-    .block-cube.block-cube-hover:hover .bg .bg-inner {
-      top: 100%;
-    }
-
-    .text:hover {
-      color: white;
-    }
-    /* styling for the submit button ends*/
-
-    #sbm-err-msg {
-      color: #C70039;
-      font-weight: bold;
-      font-size: 2em;
-      text-align: center;
-    }
-
   `;
 
   static properties = {
@@ -132,34 +43,20 @@ export class EliteForm extends LitElement {
       <div>
         <slot></slot>
         <button 
-          class='btn block-cube block-cube-hover' 
+          class='submitBtn' 
           @click=${() => this.validateForm(this.onSubmit, this.arr)}>
-        <!-- divs for styling starts -->
-          <div class='bg-top'>
-            <div class='bg-inner'></div>
-          </div>
-          <div class='bg-right'>
-            <div class='bg-inner'></div>
-          </div>
-          <div class='bg'>
-            <div class='bg-inner'></div>
-          </div>
-          <div class='text'>
             ${this.buttonName}
-          </div>
-        <!-- divs for styling ends -->
         </button>
         <div id='sbm-err-msg' ?hidden=${this.error}>${this.badFormMessage}</div>
+        test text
       </div>
     `;
   }
 
   validateForm(callback, arr) {
-    const fields = this.querySelectorAll('.elite-form')
-    // console.log(fields)
+    const fields = this.querySelectorAll('.elite-input')
     let fieldsCheck = true
     const cache = {}
-    // console.log(fields[0].id)
 
     for (let singleElement in fields) {
       const currentElement = fields[singleElement]
@@ -180,8 +77,6 @@ export class EliteForm extends LitElement {
             currentElement.handleValidation()
           }
           cache[currentElement.id] = currentElement.value
-          // console.log(cache)
-          // console.log(currentElement.error)
           if (Object.keys(currentElement.error).length > 0) fieldsCheck = false
         } else {
           const { id, value } = fields[singleElement]
