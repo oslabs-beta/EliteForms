@@ -29,30 +29,26 @@ export class EliteInput extends LitElement {
   `}
 
   static properties = {
-    eliteForm: {},
     id: {},
+    name: {},
     class: {},
     type: {},
     label: {},
     placeholder: {},
     note: {},
-    name: {},
     validationRules: {}, // this is the prop that the dev passes in
-    asyncValidationRules: {},
-    errors: {},
     errorBehavior: {}, 
     validationName: {},
     options: {},
+    optionGroup: {},
+    defaultHidden: {},
     min: {},
     max: {},
     showIndex: {},
     showVal: {},
-    conditional: {},
     row: {},
     cols: {},
     showWordCount: {},
-    defaultHidden: {}, 
-    optionGroup: {}
   }
 
   static state = {
