@@ -51,7 +51,8 @@ export class EliteInput extends LitElement {
     row: {},
     cols: {},
     showWordCount: {},
-    defaultHidden: {}
+    defaultHidden: {}, 
+    optionGroup: {}
   }
 
   static state = {
@@ -116,7 +117,38 @@ export class EliteInput extends LitElement {
       `;
     } 
     else if (this.type === 'select') {
-      return html `
+      if (this.optionGroup) {
+        console.log(this.optionGroup)
+        const optionGroups = Object.entries(this.optionGroup)
+        return html `
+        <div class='elite-form' style=${styleMap(this.styles)}>
+          <label>${this.label}</label><br>
+          <select id=${this.id} name=${this.name} @change=${this.handleInput}>
+          <option value='none' selected disabled hidden>${this.defaultHidden}</option>
+
+            ${optionGroups.map((group) => {
+              const options = Object.entries(group[1])
+              
+              return html `
+              <optgroup label=${group[0]}>
+                  ${options.map((option) => {
+                    return html `
+                    <option value=${option[0]}>${option[1]}</option>
+                    `
+                  })}
+              </optgroup>
+              `
+            })}
+          </select>
+          <ul 
+            class="error" 
+            style=${styleMap(this.errorStyles)}>
+            ${error} 
+          </ul>
+        </div>
+      `
+      } else {
+        return html `
         <div class='elite-form' style=${styleMap(this.styles)}>
           <label>${this.label}</label><br>
           <select id=${this.id} name=${this.name} @change=${this.handleInput}>
@@ -133,6 +165,7 @@ export class EliteInput extends LitElement {
           </ul>
         </div>
       `
+      }
     } 
     else if (this.type === 'textarea') {
       return html `
