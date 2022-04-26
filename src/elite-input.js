@@ -51,7 +51,8 @@ export class EliteInput extends LitElement {
     row: {},
     cols: {},
     showWordCount: {},
-    defaultHidden: {}
+    defaultHidden: {}, 
+    optionGroup: {}
   }
 
   static state = {
