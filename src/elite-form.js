@@ -5,8 +5,13 @@ export class EliteForm extends LitElement {
     :host {
       font-family: monospace;
     }
+
+    button {
+      color: skyblue;
+    }
+
     /* styling for the submit button starts*/
-    .btn {
+    /* .btn {
       width: 100%;
       display: block;
       margin: 50px 0px;
@@ -19,7 +24,7 @@ export class EliteForm extends LitElement {
       font-weight: bold;
       font-family: monospace;
       font-size: 16px;
-    }
+    } */
 
   `;
 
