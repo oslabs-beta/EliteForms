@@ -120,15 +120,6 @@ export class EliteInput extends LitElement {
       `;
     } 
     else if (this.type === 'select') {
-   
-      // optionGroups.map((group) => {
-      //   console.log('group: ', group[0])
-      //   const options = Object.values(group[1])
-      //   options.map((option) => {
-      //     console.log('option: ', option)
-      //   })
-      // })
-     
       if (this.optionGroup) {
         console.log(this.optionGroup)
         const optionGroups = Object.entries(this.optionGroup)
@@ -138,26 +129,12 @@ export class EliteInput extends LitElement {
           <select id=${this.id} name=${this.name} @change=${this.handleInput}>
           <option value='none' selected disabled hidden>${this.defaultHidden}</option>
 
-          <!-- <optgroup label='test'>
-            <option>test</option>
-          </optgroup>
-          <optgroup label='test2'>
-            <option>test2</option>
-          </optgroup> -->
-
             ${optionGroups.map((group) => {
-              // console.log('group: ', group)
-              // console.log('group[0]: ', group[0])
               const options = Object.entries(group[1])
-              // console.log('options: ', options)
               
               return html `
               <optgroup label=${group[0]}>
-                <!-- <option value='none' selected disabled hidden>${this.defaultHidden}</option> -->
                   ${options.map((option) => {
-                    // console.log('option in map: ', option)
-                    // console.log(option[0])
-                    // console.log(option[1])
                     return html `
                     <option value=${option[0]}>${option[1]}</option>
                     `
