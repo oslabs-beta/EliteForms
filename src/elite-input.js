@@ -49,6 +49,7 @@ export class EliteInput extends LitElement {
     row: {},
     cols: {},
     showWordCount: {},
+    conditional: {}
   }
 
   static state = {
@@ -110,11 +111,14 @@ export class EliteInput extends LitElement {
           </ul>
           </div>
         </div>
+        <div ?hidden=${this.conditionalBool}>
+          <slot>
+          </slot>
+        </div>
       `;
     } 
     else if (this.type === 'select') {
       if (this.optionGroup) {
-        console.log(this.optionGroup)
         const optionGroups = Object.entries(this.optionGroup)
         return html `
         <div class='elite-form' style=${styleMap(this.styles)}>
@@ -242,7 +246,7 @@ export class EliteInput extends LitElement {
   }
 
   handleConditional() {
-    if (this.value === this.conditional[0]) {
+    if (this.value == this.conditional[0]) {
       this.conditionalBool = false
     } else {
       this.conditionalBool = true
@@ -272,7 +276,11 @@ export class EliteInput extends LitElement {
         }
       }
     }
+    
     this.value = response
+    if (this.conditional) {
+      this.handleConditional()
+    }
     this.handleValidation()
   }
 
@@ -282,7 +290,9 @@ export class EliteInput extends LitElement {
     if (this.errorBehavior === 'blur') {
       const { value } = event.target;
       this.value = value
-      if (this.conditional) this.handleConditional()
+      if (this.conditional) {
+        this.handleConditional()
+      }
       this.handleValidation()
     }
   }
@@ -291,12 +301,15 @@ export class EliteInput extends LitElement {
     const { value } = event.target;
     this.value = value
     if (this.errorBehavior === 'debounce') {
-      if (this.conditional) this.handleConditional()
+      if (this.conditional) {
+        this.handleConditional()
+      }
       this.withDebounce()    
     } else {
       if (this.errorBehavior !== 'blur') {
-        console.log('hahaha')
-        if (this.conditional) this.handleConditional()
+        if (this.conditional) {
+          this.handleConditional()
+        } 
         this.handleValidation()
       }
     }
