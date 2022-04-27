@@ -180,6 +180,7 @@ export class EliteInput extends LitElement {
     this.noteStyles = ''; 
     this.errorStyles = '';
     this.showWordCountStyles = '';
+    this.conditionalBool = true;
     this.eliteInputContainerStyles = '';
     this.radioCheckboxContainerStyles = '';
     this.optionsStyles = '';
@@ -319,7 +320,7 @@ export class EliteInput extends LitElement {
           class='show-word-count'
           ?hidden=${this.showWordCount === 'false'}
           style=${styleMap(this.showWordCountStyles)}>
-            Current count is ${this.countWords()} words.
+            Current word count: ${this.countWords()}
         </div>
         ${note}
         ${error}
@@ -402,7 +403,8 @@ export class EliteInput extends LitElement {
   }
 
   handleBox(event) {
-    const form = this.shadowRoot.querySelectorAll(`.${this.id}`)
+    const form = this.shadowRoot.querySelectorAll(`.${this.name}`)
+    console.log('form: ', form)
     const response = []
     for (let input in form) {
       if (!isNaN(Number(input))) {
