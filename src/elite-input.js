@@ -150,6 +150,7 @@ export class EliteInput extends LitElement {
     row: {},
     cols: {},
     showWordCount: {},
+    conditional: {}
   }
 
   static state = {
@@ -241,6 +242,10 @@ export class EliteInput extends LitElement {
           </div>
           ${note}
           ${error}
+        </div>
+        <div ?hidden=${this.conditionalBool}>
+          <slot>
+          </slot>
         </div>
       `;
     } 
@@ -378,7 +383,7 @@ export class EliteInput extends LitElement {
   }
 
   handleConditional() {
-    if (this.value === this.conditional[0]) {
+    if (this.value == this.conditional[0]) {
       this.conditionalBool = false
     } else {
       this.conditionalBool = true
@@ -397,7 +402,7 @@ export class EliteInput extends LitElement {
   }
 
   handleBox(event) {
-    const form = this.shadowRoot.querySelectorAll(`.${this.name}`)
+    const form = this.shadowRoot.querySelectorAll(`.${this.id}`)
     const response = []
     for (let input in form) {
       if (!isNaN(Number(input))) {
@@ -408,7 +413,12 @@ export class EliteInput extends LitElement {
         }
       }
     }
+    
     this.value = response
+    console.log(this.value)
+    if (this.conditional) {
+      this.handleConditional()
+    }
     this.handleValidation()
   }
 
@@ -418,7 +428,9 @@ export class EliteInput extends LitElement {
     if (this.errorBehavior === 'blur') {
       const { value } = event.target;
       this.value = value
-      if (this.conditional) this.handleConditional()
+      if (this.conditional) {
+        this.handleConditional()
+      }
       this.handleValidation()
     }
   }
@@ -427,11 +439,15 @@ export class EliteInput extends LitElement {
     const { value } = event.target;
     this.value = value
     if (this.errorBehavior === 'debounce') {
-      if (this.conditional) this.handleConditional()
+      if (this.conditional) {
+        this.handleConditional()
+      }
       this.withDebounce()    
     } else {
       if (this.errorBehavior !== 'blur') {
-        if (this.conditional) this.handleConditional()
+        if (this.conditional) {
+          this.handleConditional()
+        } 
         this.handleValidation()
       }
     }
