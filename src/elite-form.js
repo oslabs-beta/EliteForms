@@ -1,115 +1,59 @@
 import {LitElement, html, css} from 'lit';
+import {styleMap} from 'lit/directives/style-map.js';
 
 export class EliteForm extends LitElement {
   static styles = css`
-    :host {
-      font-family: monospace;
+
+    .button-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
     }
-    /* styling for the submit button starts*/
-    .btn {
-      width: 100%;
-      display: block;
-      margin: 50px 0px;
-      padding: 14px 16px;
-      background: transparent;
-      outline: none;
-      border: 0;
-      color: #000000;
+    .submitBtn {
+      font-family: 'Roboto', sans-serif;
+      align-items: center;
+      background-color: #ffffff;
+      border: 1px solid rgba(39, 48, 152, 0.5); 
+      border-radius: .25rem;
+      box-shadow: rgba(39, 48, 152, 0.1) 0 1px 3px 0;
+      box-sizing: border-box;
+      color: rgba(39, 48, 152, 0.85);
+      cursor: pointer;
+      display: inline-flex;
+      font-size: 20px;
+      font-weight: 600;
       letter-spacing: 0.1em;
-      font-weight: bold;
-      font-family: monospace;
-      font-size: 16px;
-    }
-
-    .block-cube {
-      position: relative;
-    }
-    .block-cube .bg-top {
-      position: absolute;
-      height: 10px;
-      background: #ffffff;
-      background: linear-gradient(90deg, #020024 0%, #340979 37%, #00d4ff 94%);
-      bottom: 100%;
-      left: 5px;
-      right: -5px;
-      transform: skew(-45deg, 0);
+      justify-content: center;
+      line-height: 1.25;
       margin: 0;
-    }
-    .block-cube .bg-top .bg-inner {
-      bottom: 0;
-    }
-    .block-cube .bg {
-      position: absolute;
-      left: 0;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      background: #ffffff;
-      background: linear-gradient(90deg, #020024 0%, #340979 37%, #00d4ff 94%);
-    }
-    .block-cube .bg-right {
-      position: absolute;
-      background: #ffffff;
-      background: #00d4ff;
-      top: -5px;
-      z-index: 0;
-      bottom: 5px;
-      width: 10px;
-      left: 100%;
-      transform: skew(0, -45deg);
-    }
-    
-    .block-cube .bg-right .bg-inner {
-      left: 0;
-    }
-    .block-cube .bg .bg-inner {
-      transition: all 0.2s ease-in-out;
-    }
-    .block-cube .bg-inner {
-      background: #ffffff;
-      position: absolute;
-      left: 2px;
-      top: 2px;
-      right: 2px;
-      bottom: 2px;
-    }
-    .block-cube .text {
+      min-height: 3rem;
+      padding: calc(.875rem - 1px) calc(1.5rem - 1px);
       position: relative;
-      z-index: 2;
+      text-decoration: none;
+      transition: all 250ms;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+      vertical-align: baseline;
+      width: auto;
     }
-    .block-cube.block-input input {
-      position: relative;
-      z-index: 2;
+    .submitBtn:hover,
+    .submitBtn:focus {
+      border-color: 1px solid rgba(39, 48, 152, 0.5);
+      box-shadow: rgba(13, 242, 253, 0.3) 0 4px 12px;
+      color: rgba(49, 78, 255, 0.85);
     }
-  
-    .block-cube.block-input .bg-top,
-    .block-cube.block-input .bg-right,
-    .block-cube.block-input .bg {
-      background: rgba(255, 255, 255, 0.5);
-      transition: background 0.2s ease-in-out;
+    .submitBtn:hover {
+      transform: translateY(-1px);
     }
-    .block-cube.block-input .bg-right .bg-inner,
-    .block-cube.block-input .bg-top .bg-inner {
-      transition: all 0.2s ease-in-out;
+    .submitBtn:active {
+      background-color: #7a8fff;
+      border-color: rgba(0, 0, 0, 0.15);
+      box-shadow: rgba(0, 0, 0, 0.06) 0 2px 4px;
+      color: rgba(39, 48, 152, 0.85);
+      transform: translateY(0);
     }
-  
-    .block-cube.block-cube-hover:focus .bg .bg-inner, 
-    .block-cube.block-cube-hover:hover .bg .bg-inner {
-      top: 100%;
-    }
-
-    .text:hover {
-      color: white;
-    }
-    /* styling for the submit button ends*/
-
-    #sbm-err-msg {
-      color: #C70039;
-      font-weight: bold;
-      font-size: 2em;
-      text-align: center;
-    }
-
   `;
 
   static properties = {
@@ -125,41 +69,38 @@ export class EliteForm extends LitElement {
     this.error = true
     this.buttonName = 'Submit'
     this.badFormMessage = '!! Missing Fields !!'
+    this.buttonStyles = '';
+    this.badFormMessageStyles = '';
+    this.buttonContainerStyles = '';
   }
 
   render() {
     return html`
-      <div>
+      <div 
+        class='button-container'
+        style=${styleMap(this.buttonContainerStyles)}>
         <slot></slot>
         <button 
-          class='btn block-cube block-cube-hover' 
-          @click=${() => this.validateForm(this.onSubmit, this.arr)}>
-        <!-- divs for styling starts -->
-          <div class='bg-top'>
-            <div class='bg-inner'></div>
-          </div>
-          <div class='bg-right'>
-            <div class='bg-inner'></div>
-          </div>
-          <div class='bg'>
-            <div class='bg-inner'></div>
-          </div>
-          <div class='text'>
+          class='submitBtn' 
+          @click=${() => this.validateForm(this.onSubmit, this.arr)}
+          style=${styleMap(this.buttonStyles)}>
             ${this.buttonName}
-          </div>
-        <!-- divs for styling ends -->
         </button>
-        <div id='sbm-err-msg' ?hidden=${this.error}>${this.badFormMessage}</div>
+        <div 
+          class='sbm-err-msg' 
+          id='sbm-err-msg' 
+          ?hidden=${this.error}
+          style=${styleMap(this.badFormMessageStyles)}>
+            ${this.badFormMessage}
+          </div>
       </div>
     `;
   }
 
   validateForm(callback, arr) {
-    const fields = this.querySelectorAll('.elite-form')
-    // console.log(fields)
+    const fields = this.querySelectorAll('.elite-input')
     let fieldsCheck = true
     const cache = {}
-    // console.log(fields[0].id)
 
     for (let singleElement in fields) {
       const currentElement = fields[singleElement]
@@ -180,8 +121,6 @@ export class EliteForm extends LitElement {
             currentElement.handleValidation()
           }
           cache[currentElement.id] = currentElement.value
-          // console.log(cache)
-          // console.log(currentElement.error)
           if (Object.keys(currentElement.error).length > 0) fieldsCheck = false
         } else {
           const { id, value } = fields[singleElement]
@@ -196,7 +135,6 @@ export class EliteForm extends LitElement {
       this.error = false
     }
   }
-
 }
 
 window.customElements.define('elite-form', EliteForm);
