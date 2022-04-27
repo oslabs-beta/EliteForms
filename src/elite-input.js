@@ -5,11 +5,9 @@ import debounce from 'elite-forms/src/debounce'
 
 export class EliteInput extends LitElement {
   static styles = css`
-    @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;200;300;400;500;600;700;900&display=swap');
 
     :host {
-      font-family: monospace;
-      /* font-family: 'Roboto', sans-serif; */
+      font-family: 'Roboto', sans-serif;
       color: #595b5e;
     }
     .elite-input-container {
@@ -32,7 +30,6 @@ export class EliteInput extends LitElement {
       border-radius: .25rem;
       box-shadow: rgba(39, 48, 152, 0.1) 0 1px 3px 0;
       box-sizing: border-box;
-      /* color: rgba(39, 48, 152, 0.85); */
       color: #595b5e;
       font-size: 16px;
       line-height: 1.25;
@@ -129,27 +126,27 @@ export class EliteInput extends LitElement {
       display: flex;
       justify-items: center;
     }
-
   `;
 
-  static properties = { // passed in by developers
+  static properties = {
     id: {},
+    name: {},
     class: {},
     label: {},
     name: {},
     placeholder: {},
     type: {},
     note: {},
-    validationRules: {},    
-    errorBehavior: {},
+    validationRules: {},
+    errorBehavior: {}, 
     validationName: {},
     options: {},
     optionGroup: {},
+    defaultHidden: {},
     min: {},
     max: {},
     showIndex: {},
     showVal: {},
-    defaultHidden: {}, 
     row: {},
     cols: {},
     showWordCount: {},
@@ -160,7 +157,7 @@ export class EliteInput extends LitElement {
     debounce: debounce
   }
 
-  constructor() { // initialize
+  constructor() {
     super();
     this.id = '';
     this.class = '';
@@ -186,7 +183,7 @@ export class EliteInput extends LitElement {
     this.radioCheckboxContainerStyles = '';
     this.optionsStyles = '';
     this.rangeMinmaxIndexboxStyles = '';
-    this.rangeValuebox = '';
+    this.rangeValueboxStyles = '';
   }
 
   render() {
@@ -348,7 +345,7 @@ export class EliteInput extends LitElement {
             id='range-valuebox' 
             class='range-valuebox' 
             ?hidden=${!this.showVal}
-            style=${styleMap(this.rangeValuebox)}>
+            style=${styleMap(this.rangeValueboxStyles)}>
               ${this.value ? this.value : "slide it"}
           </span>
         ${note}

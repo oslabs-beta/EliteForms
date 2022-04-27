@@ -3,9 +3,7 @@ import {styleMap} from 'lit/directives/style-map.js';
 
 export class EliteForm extends LitElement {
   static styles = css`
-    :host {
-      /* font-family: monospace; */
-    }
+
     .button-container {
       display: flex;
       flex-direction: column;
