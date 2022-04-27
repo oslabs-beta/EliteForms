@@ -6,14 +6,12 @@ export class EliteForm extends LitElement {
     :host {
       /* font-family: monospace; */
     }
-
-    .form-container {
+    .button-container {
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
     }
-
     .submitBtn {
       font-family: 'Roboto', sans-serif;
       align-items: center;
@@ -42,18 +40,15 @@ export class EliteForm extends LitElement {
       vertical-align: baseline;
       width: auto;
     }
-
     .submitBtn:hover,
     .submitBtn:focus {
       border-color: 1px solid rgba(39, 48, 152, 0.5);
       box-shadow: rgba(13, 242, 253, 0.3) 0 4px 12px;
       color: rgba(49, 78, 255, 0.85);
     }
-
     .submitBtn:hover {
       transform: translateY(-1px);
     }
-
     .submitBtn:active {
       background-color: #7a8fff;
       border-color: rgba(0, 0, 0, 0.15);
@@ -61,12 +56,7 @@ export class EliteForm extends LitElement {
       color: rgba(39, 48, 152, 0.85);
       transform: translateY(0);
     }
-
-
-
   `;
-
-  
 
   static properties = {
     onSubmit: {},
@@ -83,11 +73,14 @@ export class EliteForm extends LitElement {
     this.badFormMessage = '!! Missing Fields !!'
     this.buttonStyles = '';
     this.badFormMessageStyles = '';
+    this.buttonContainerStyles = '';
   }
 
   render() {
     return html`
-      <div class='form-container'>
+      <div 
+        class='button-container'
+        style=${styleMap(this.buttonContainerStyles)}>
         <slot></slot>
         <button 
           class='submitBtn' 
@@ -144,7 +137,6 @@ export class EliteForm extends LitElement {
       this.error = false
     }
   }
-
 }
 
 window.customElements.define('elite-form', EliteForm);

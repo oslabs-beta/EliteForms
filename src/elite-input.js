@@ -3,17 +3,15 @@ import {styleMap} from 'lit/directives/style-map.js';
 import internalValMethods from 'elite-forms/src/elite-form-rules'
 import debounce from 'elite-forms/src/debounce'
 
-
 export class EliteInput extends LitElement {
   static styles = css`
     @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;200;300;400;500;600;700;900&display=swap');
 
     :host {
-      /* font-family: monospace */
-      font-family: 'Roboto', sans-serif;
+      font-family: monospace;
+      /* font-family: 'Roboto', sans-serif; */
       color: #595b5e;
     }
-
     .elite-input-container {
       display: flex;
       flex-direction: column;
@@ -21,14 +19,12 @@ export class EliteInput extends LitElement {
       padding: 10px;
       width: 400pt;
     }
-    
     label {
       font-size: 1.3em;
       font-weight: bold;
       letter-spacing: 0.1em;
       padding-bottom: 0.3em;
     }
-    
     .text-input, .radio-checkbox-container, textarea, select {
       font-family: 'Roboto', sans-serif;
       background-color: #ffffff;
@@ -36,35 +32,28 @@ export class EliteInput extends LitElement {
       border-radius: .25rem;
       box-shadow: rgba(39, 48, 152, 0.1) 0 1px 3px 0;
       box-sizing: border-box;
-      color: rgba(39, 48, 152, 0.85);
+      /* color: rgba(39, 48, 152, 0.85); */
+      color: #595b5e;
       font-size: 16px;
       line-height: 1.25;
       margin: 0;
       min-height: 3rem;
       padding: calc(.875rem - 1px) calc(1.5rem - 1px);
     }
-
     .text-input:focus, textarea:focus, select:focus {
       outline: 1px solid rgba(13, 242, 253, 0.8);
     }
-
-    .note, .showWordCount, .error {
+    .note, .show-word-count, .error {
       padding-top: 10px;
     }
-
-    .note, .showWordCount {
+    .note, .show-word-count {
       color: rgba(39, 48, 152, 0.85);
     }
-
-    .error {
+    ul.error {
       color: rgb(49, 78, 255);
       padding: 10pt, 0, 0, 10pt;
-    }
-
-    ul {
       list-style-type: "✕ ";
     }
-
     .range-minmax-indexbox {
       display: flex;
       justify-content: space-between;
@@ -74,8 +63,7 @@ export class EliteInput extends LitElement {
       margin-left: 10px;
       }
     }
-
-    .range-value-bullet {
+    .range-valuebox {
       font-size: 1.5em;
       color: rgb(39, 48, 152);
       font-weight: 600;
@@ -83,7 +71,6 @@ export class EliteInput extends LitElement {
       justify-content: center;
       margin-top: 1em;
     }
-
     .range-input {
       -webkit-appearance: none;
       background-color: rgba(39, 48, 152, 0.5);
@@ -91,7 +78,6 @@ export class EliteInput extends LitElement {
       border-radius: 5px;
       outline: 0;
     }
-
     .range-input::-webkit-slider-thumb {
       -webkit-appearance: none;
       background-color: rgba(49, 78, 255, 0.8); 
@@ -103,10 +89,6 @@ export class EliteInput extends LitElement {
       transition: .3s ease-in-out;
     }
 
-    .options {
-      margin-bottom: 0.2em;
-    }
-
     input[type='checkbox'] {
       height: 15px;
       width: 15px;
@@ -114,15 +96,40 @@ export class EliteInput extends LitElement {
       -moz-appearance: none;
       -o-appearance: none;
       appearance: none;
-      border: 1px solid #595b5e;
+      border: 1px solid rgba(39, 48, 152, 0.5);
       outline: none;
       transition-duration: 0.3s;
       cursor: pointer;
+      margin-right: 0.5em;
     }
     input[type='checkbox']:checked {
       border: 1px solid #0df2fd;
-      background-color: rgba(39, 48, 152, 0.8);
+      background-color: rgba(49, 78, 255, 0.8);
     }
+    input[type='radio'] {
+      height: 15px;
+      width: 15px;
+      border-radius: 100%;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      -o-appearance: none;
+      appearance: none;
+      border: 1px solid rgba(39, 48, 152, 0.5);
+      outline: none;
+      transition-duration: 0.3s;
+      cursor: pointer;
+      margin-right: 0.5em;
+    }
+    input[type='radio']:checked {
+      border: 1px solid #0df2fd;
+      background-color: rgba(49, 78, 255, 0.8);
+    }
+    .options {
+      margin-bottom: 0.2em;
+      display: flex;
+      justify-items: center;
+    }
+
   `;
 
   static properties = { // passed in by developers
@@ -175,6 +182,11 @@ export class EliteInput extends LitElement {
     this.noteStyles = ''; 
     this.errorStyles = '';
     this.showWordCountStyles = '';
+    this.eliteInputContainerStyles = '';
+    this.radioCheckboxContainerStyles = '';
+    this.optionsStyles = '';
+    this.rangeMinmaxIndexboxStyles = '';
+    this.rangeValuebox = '';
   }
 
   render() {
@@ -205,19 +217,26 @@ export class EliteInput extends LitElement {
             ${this.note}
       </div>`
     
-    
     if (this.type === 'radio' || this.type === 'checkbox') {
       return html`
         <div class='elite-input-container' style=${styleMap(this.styles)}>
           ${label}
-          <div class='radio-checkbox-container' @change=${this.handleBox} id=${this.id} name=${this.name}>
+          <div 
+            class='radio-checkbox-container' 
+            style=${styleMap(this.radioCheckboxContainerStyles)}
+            @change=${this.handleBox} 
+            id=${this.id} 
+            name=${this.name}>
             ${this.options.map((option) => html `
-              <div class='options'>
-                <input
+              <div 
+                class='options' 
+                style=${styleMap(this.optionsStyles)}>
+                <input 
                   type=${this.type}
                   name=${this.name}
                   class=${this.name}
                   value=${option.value}
+                  style=${styleMap(this.inputStyles)}
                 >${option.option}<br>
               </div>
             `
@@ -234,7 +253,11 @@ export class EliteInput extends LitElement {
         return html `
         <div class='elite-input-container' style=${styleMap(this.styles)}>
           ${label}
-          <select id=${this.id} name=${this.name} @change=${this.handleInput}>
+          <select 
+            id=${this.id} 
+            name=${this.name} 
+            @change=${this.handleInput}
+            style=${styleMap(this.inputStyles)}>
           <option value='none' selected disabled hidden>${this.defaultHidden}</option>
 
             ${optionGroups.map((group) => {
@@ -259,7 +282,11 @@ export class EliteInput extends LitElement {
         return html `
         <div class='elite-input-container' style=${styleMap(this.styles)}>
           ${label}
-          <select id=${this.id} name=${this.name} @change=${this.handleInput}>
+          <select 
+            id=${this.id} 
+            name=${this.name} 
+            @change=${this.handleInput}
+            style=${styleMap(this.inputStyles)}>
           <option value='none' selected disabled hidden>${this.defaultHidden}</option>
           ${this.options.map((option) => 
             html `
@@ -284,9 +311,10 @@ export class EliteInput extends LitElement {
           placeholder=${this.placeholder}
           style=${styleMap(this.inputStyles)}
           row=${this.row}
-          cols=${this.cols}></textarea>
+          cols=${this.cols}>
+        </textarea>
         <div
-          class='showWordCount'
+          class='show-word-count'
           ?hidden=${this.showWordCount === 'false'}
           style=${styleMap(this.showWordCountStyles)}>
             Current count is ${this.countWords()} words.
@@ -300,7 +328,12 @@ export class EliteInput extends LitElement {
       return html`
       <div class='elite-input-container' style=${styleMap(this.styles)}>
         ${label}
-          <div class='range-minmax-indexbox' ?hidden=${!this.showIndex}><span>${this.min}</span><span>${this.max}</span></div>
+          <div 
+            class='range-minmax-indexbox' 
+            ?hidden=${!this.showIndex}
+            style=${styleMap(this.rangeMinmaxIndexboxStyles)}>
+              <span>${this.min}</span><span>${this.max}</span>
+          </div>
           <input 
             class='range-input'
             id=${this.id} 
@@ -311,7 +344,13 @@ export class EliteInput extends LitElement {
             min=${this.min}
             max=${this.max}
             style=${styleMap(this.inputStyles)}>
-            <span id='range-bullet' class='range-value-bullet' ?hidden=${!this.showVal}>${this.value ? this.value : "slide it"}</span>
+          <span 
+            id='range-valuebox' 
+            class='range-valuebox' 
+            ?hidden=${!this.showVal}
+            style=${styleMap(this.rangeValuebox)}>
+              ${this.value ? this.value : "slide it"}
+          </span>
         ${note}
         ${error}
       </div>
