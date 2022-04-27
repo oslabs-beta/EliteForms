@@ -79,7 +79,7 @@ export class EliteInput extends LitElement {
     this.showVal = false;
     this.conditionalBool = true;
     this.row = '4'; // text area default row
-    this.cols = '50'; // text area default columns
+    this.cols = '50'; // text area default columnsg
     this.showWordCount = true;
     this.defaultHidden = ' select one option'
   }
@@ -94,7 +94,7 @@ export class EliteInput extends LitElement {
       return html`
         <div class='elite-form' style=${styleMap(this.styles)}>
           <label>${this.label}</label><br>
-          <div @change=${this.handleBox} id=${this.name}>
+          <div @change=${this.handleBox} id=${this.id}>
             ${this.options.map((option) => html `
               <input
                 type=${this.type}
@@ -187,7 +187,7 @@ export class EliteInput extends LitElement {
           class="showWordCount" 
           ?hidden=${this.showWordCount === 'false'}
           style=${styleMap(this.showWordCountStyles)}>
-            Current count is ${this.countWords()} words.
+            Current word count: ${this.countWords()}
         </div>
         <div 
           class="note" 
@@ -265,7 +265,8 @@ export class EliteInput extends LitElement {
   }
 
   handleBox(event) {
-    const form = this.shadowRoot.querySelectorAll(`.${this.id}`)
+    const form = this.shadowRoot.querySelectorAll(`.${this.name}`)
+    console.log('form: ', form)
     const response = []
     for (let input in form) {
       if (!isNaN(Number(input))) {
