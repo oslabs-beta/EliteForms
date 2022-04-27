@@ -265,7 +265,7 @@ export class EliteInput extends LitElement {
   }
 
   handleBox(event) {
-    const form = this.shadowRoot.querySelectorAll(`.${this.name}`)
+    const form = this.shadowRoot.querySelectorAll(`.${this.id}`)
     const response = []
     for (let input in form) {
       if (!isNaN(Number(input))) {
@@ -278,6 +278,7 @@ export class EliteInput extends LitElement {
     }
     
     this.value = response
+    console.log(this.value)
     if (this.conditional) {
       this.handleConditional()
     }
