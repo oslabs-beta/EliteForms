@@ -141,7 +141,7 @@ To create conditional fields, you must nest your conditional field within the de
 ## Contributing
 
 We welcome all contributors! 
-- Features + improvements we’ve started or would like to see implemented:
+Features + improvements we’ve started or would like to see implemented:
 - Model binding 
 - Typescript support 
 - Ability to create custom validation rule
