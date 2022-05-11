@@ -8,6 +8,7 @@ A robust form library for Lit that enriches input components with easy-to-use da
 2) ```import 'elite-forms'``` into your project file 
 
 ## Usage
+For full documentation, please visit our website <https://www.eliteforms.io/>
 ### Using the elite-form tag ###
 
 Our custom <elite-form> element allows you to validate the entire form before a submit event and comes equipped with a Submit button. 
